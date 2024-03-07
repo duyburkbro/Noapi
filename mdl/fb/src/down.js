@@ -1,4 +1,5 @@
 module.exports.down = async function(req, res) {
+	
 	try {
 		{
 			const{
@@ -9,10 +10,10 @@ module.exports.down = async function(req, res) {
 					data: "Thiếu link"
 				})
 			};
-			if (!cookie) return res.status(404).json({
-					data: 'Thiếu Cookie'});
+			/*if (!cookie) return res.status(404).json({
+					data: 'Thiếu Cookie'});*/
 
-				const appState = require("./appstate.json");
+				const appState = require("./../../../appstate.json");
 					//fs = require('fs-extra');
 				const cookie = appState.map(item => item = item.key + "=" + item.value).join(";");
 
@@ -122,7 +123,7 @@ module.exports.down = async function(req, res) {
 				for (i of h) {
 					he[i.name.replace(':', '')] = i.value;
 				};
-			//const url = 'https://www.facebook.com/100077738764781/posts/pfbid02BR2jwvv9eNvaHT9S5xgrYnMejCQhTwgsF5nTyd2jGxKh6BPj9H6UsfcdR8xuMTY9l/',
+			//const url = 'https://www.facebook.com/share/r/aP9FEqtVXZKrPH4B/?mibextid=oFDknk',
 				const url2 = (await require('axios').get(url, {
 						headers: he
 				})).request.res.responseUrl;
@@ -144,14 +145,15 @@ imgElement.each((index, element) => {
   const srcAttribute = element.attribs;
   urlpic.push({ url: srcAttribute.src, alt: srcAttribute.alt, index});
 });
-console.log({textElements}, {text2Elements}, {urlpic})
+//console.log({textElements}, {text2Elements}, {urlpic})
  for (let i of urlpic) {
-  if (!i.url.includes('scontent') || cd != i.index) continue;
+  if (!i.url.includes('scontent')) continue;
   else {
     image.push({index: i.index, url: i.url, alt: i.alt})
   }
   cd++
 };
+//console.log({textElements, text2Elements, urlpic})
 /*for (let i of text2Elements) {
   console.log(i.element.children[0], i.index)
 };
@@ -176,13 +178,14 @@ return;*/
 					} catch (e) { quality.push({ error: 'Hãy chắc chắn link có video' }) };
 					var data = {
 						quality,
-						image: image.slice(1) || null,
-						title: (textElements.find(i => i.index == 4).element || textElements.find(i => i.index == 24).element) || null,
-						author: (image[0] || null),
+						image: image || null,
+						title: (textElements.find(i => i.index > 2).element || textElements.find(i => i.index == 24).element) || null,
+						author: (image.find(i => i.alt.length > 2) || null),
 						postTime: (textElements.find(i => i.index == 9)).element || null,
-						like: (textElements.find(i => i.index == 6) || textElements.find(i => i.index == 5)).element || null,
+						like: (textElements.find(i => i.index == 25) || textElements.find(i => i.index == 6) || textElements.find(i => i.index == 5)).element || null,
 						comment: (text2Elements.find(i => i.index == 2) || text2Elements.find(i => i.index == 3)).element || null,
-						share: text2Elements.find(i => i.index == 3).element || null
+						share: text2Elements.find(i => i.index == 3).element || null,
+						view: (textElements.find(i => i.index == 26).element || null)
 					}
 					console.log(data)
 				})
@@ -190,4 +193,5 @@ return;*/
 	} catch (error) {
 		console.log(error)
 	}
+
 }
